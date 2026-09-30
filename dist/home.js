@@ -1,0 +1,23 @@
+'use strict';
+let globalSearchQuery='';
+function referenceDashboard(){
+  const agenda=tasks.filter(t=>!t.done).sort((a,b)=>a.due.localeCompare(b.due));
+  const lgpd=demands.filter(d=>d.category==='LGPD'&&isOpen(d)).length;
+  const compliance=demands.filter(d=>d.category==='Compliance'&&isOpen(d)).length;
+  return heading('Jurídico MG Cred','Visão executiva das demandas jurídicas, processos e compliance.')+metrics()+`<div class="reference-grid">
+    <section class="panel"><div class="panel-head"><h2>Prioridades e próximos prazos</h2></div>${agenda.slice(0,4).map(t=>`<div class="reference-row"><div><button class="row-link" data-action="detail" data-id="${t.origin}">${t.origin} · ${esc(t.title)}</button><p>${esc(t.owner)}</p></div><span class="badge ${statusClass(t.priority)}">${fmtDate(t.due)}</span></div>`).join('')||'<div class="empty">Nenhuma tarefa pendente.</div>'}<a class="text-button" href="#tarefas">Ver todos os prazos →</a></section>
+    <section class="panel"><div class="panel-head"><h2>Acesso rápido</h2></div><div class="quick-actions"><button data-action="new">＋ Abrir demanda</button><button data-action="send-document">▱ Enviar documento</button><a href="#relatorios">◫ Ver relatório</a><a href="#governanca">◇ Compliance</a></div><h2 class="subheading">Pendências da MG Cred</h2>${pending().slice(0,2).map(d=>`<div class="reference-row"><div><button class="row-link" data-action="detail" data-id="${d.id}">${esc(d.subject)}</button><p>${d.id} · ${esc(d.department)}</p></div><span class="badge amber">Pendente</span></div>`).join('')||'<div class="empty">Nenhuma pendência.</div>'}<button class="text-button" data-action="metric" data-target="demandas" data-pending="yes">Ver todas (${pending().length}) →</button></section>
+    <section class="panel"><div class="panel-head"><h2>Últimas movimentações</h2></div>${activity.slice(0,3).map(a=>`<div class="reference-row event-row"><div><strong>${esc(a.text)}</strong><p>${esc(a.time)}</p></div></div>`).join('')}</section>
+    <section class="panel"><div class="panel-head"><h2>Compliance & LGPD</h2></div><div class="reference-row"><div><strong>Demandas LGPD</strong><p>Solicitações em acompanhamento</p></div><strong>${lgpd}</strong></div><div class="reference-row"><div><strong>Demandas de Compliance</strong><p>Solicitações em acompanhamento</p></div><strong>${compliance}</strong></div><div class="reference-row"><div><strong>Incidentes e políticas</strong><p>Controles previstos para a próxima fase</p></div><span class="badge">Em planejamento</span></div><a class="text-button" href="#governanca">Abrir governança →</a></section>
+  </div>`;
+}
+function searchPage(){
+  const q=globalSearchQuery.trim().toLocaleLowerCase('pt-BR');
+  if(!q)return heading('Busca','Digite um termo na busca do topo.',false);
+  const matchingDemands=demands.filter(d=>`${d.id} ${d.subject} ${d.department}`.toLocaleLowerCase('pt-BR').includes(q));
+  const matchingProcesses=processes.filter(p=>`${p.id} ${p.title} ${p.party} ${p.court}`.toLocaleLowerCase('pt-BR').includes(q));
+  const matchingFiles=demands.flatMap(d=>d.files.map(f=>({...f,demand:d.id}))).filter(f=>`${f.name} ${f.demand}`.toLocaleLowerCase('pt-BR').includes(q));
+  return heading('Resultados da busca',`Resultados para “${esc(globalSearchQuery)}”`,false)+`<section class="panel result-section"><div class="panel-head"><h2>Demandas (${matchingDemands.length})</h2></div>${demandTable(matchingDemands)}</section><section class="panel result-section"><div class="panel-head"><h2>Processos (${matchingProcesses.length})</h2></div>${matchingProcesses.length?`<div class="panel-body">${matchingProcesses.map(p=>`<div class="reference-row"><div><strong>${esc(p.title)}</strong><p>${p.id} · ${p.party} · ${p.court}</p></div>${badge(p.risk)}</div>`).join('')}</div>`:'<div class="empty">Nenhum processo encontrado.</div>'}</section><section class="panel result-section"><div class="panel-head"><h2>Documentos da sessão (${matchingFiles.length})</h2></div>${matchingFiles.length?`<div class="panel-body"><ul class="files">${matchingFiles.map(f=>`<li><a href="${f.url}" download="${esc(f.name)}">↓ ${esc(f.name)}</a> <span class="muted">${f.demand}</span></li>`).join('')}</ul></div>`:'<div class="empty">Nenhum documento encontrado nos anexos desta sessão.</div>'}</section>`;
+}
+document.addEventListener('submit',event=>{if(event.target.id!=='global-search')return;event.preventDefault();globalSearchQuery=event.target.elements.query.value.trim();location.hash='busca';render();});
+document.addEventListener('click',event=>{if(!event.target.closest('[data-action="send-document"]'))return;openRequest();$('#request-form').elements.attachments.focus();notify('Anexe o documento a uma nova solicitação fictícia.');});

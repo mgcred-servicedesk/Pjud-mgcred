@@ -1,0 +1,27 @@
+/* Fonte: https://mgcred.com.br/ — referência visual consultada em 21/09/2026.
+   Roxos #2e2267 / #563fc0; destaques #ff7e00 / #ff5c3f; Poppins.
+   Texto escuro sobre os botões laranja preserva contraste no portal. */
+:root{font-family:Poppins,"Segoe UI",Arial,sans-serif;--blue:#563fc0;--navy:#2e2267;--muted:#726b82;--border:#e9e5f0;--brand-orange:#ff7e00;--brand-coral:#ff5c3f;color:#29213e;background:#f7f7fa;accent-color:#563fc0}
+.sidebar{background:linear-gradient(165deg,#2e2267 0%,#3a2a85 65%,#563fc0 100%);color:#e0daf2;border-right:0}
+.brand{display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding:0 12px 22px}
+.brand img{display:block;width:168px;height:60px;object-fit:contain;object-position:left center}
+.brand small{font-size:10px;letter-spacing:2.1px;font-weight:500;color:#d1c8ec;margin:0}
+nav p{color:#c0b3e0;font-size:11px;letter-spacing:1.5px}
+nav a{color:#f2effa;font-size:14px}nav a.active{background:#ffffff18;color:#fff;box-shadow:inset 3px 0 #ff9640}nav a:hover{background:#ffffff12;color:#fff}.nav-count{background:#ffffff20;color:#fff}
+.avatar{background:#ffffff12;border-color:#ffffff35;color:#fff}.sidebar-bottom small{color:#d1c8ec}
+.topbar{border-top:4px solid transparent;border-image:linear-gradient(90deg,#ff7e00,#ff5c3f) 1;padding-top:20px}
+#global-search{border-color:#e5e0ee;box-shadow:0 2px 8px #2e226704}#global-search input{color:#352952}#global-search input::placeholder{color:#827a91}#global-search button{color:#563fc0}
+.user{color:#352952}.user small,.page-head p{color:#736b83}.page-head h1{color:#2e2267;font-weight:700;letter-spacing:-.6px}.eyebrow{color:#79658f}
+.primary{background:linear-gradient(100deg,#ff7e00,#ff5c3f);color:#24183c;border-radius:28px;box-shadow:0 4px 12px #ff7e001c;font-weight:650}
+.primary:hover{background:linear-gradient(100deg,#ff9228,#ff755a);color:#24183c}
+.secondary{border-color:#dcd3ee;color:#4c389b;border-radius:24px}.secondary:hover{background:#f2eefb}.subtle{color:#675682}
+.text-button{color:#563fc0}.text-button:hover{color:#3c278f}.row-link{color:#3b2b58}.row-link:hover{color:#6542ce}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline-color:#9679ec}
+.metric,.panel{border-color:#e9e5f0;box-shadow:0 5px 18px #2e226707}.metric strong{color:#2e2267}.metric-top{color:#766b88}.metric small{color:#786e88}.metric:hover{border-color:#b8a8dd}.metric.attention{border-top:3px solid #ff7e00}.metric.attention small{color:#9a5608}
+.panel-head{border-color:#eeeaf4}h2,h3{color:#3b2b58}.panel-head p,.muted,.reference-row p{color:#766e85}
+.quick-actions button,.quick-actions a{border-color:#e5def0;background:#faf8fe;color:#4b368c;border-radius:14px}.quick-actions a:hover,.quick-actions button:hover{background:#f0eafa;border-color:#c9bae7}.quick-actions button:first-child{background:#fff3e9;border-color:#ffd5b2;color:#803c09}
+.badge.blue{background:#efeafa;color:#563aa4}.badge.amber{background:#fff1da;color:#8b590b}.badge.red{background:#ffebee;color:#aa304b}.badge.green{background:#e8f5ee;color:#267254}
+th{background:#faf8fd;color:#766886}td,.reference-row,.check-row{border-color:#eeeaf4}.notice{background:#f0ebfa;color:#5a4784}.detail-description{background:#f7f4fc}.detail-meta{color:#6d5f80}dialog{color:#35294a}.history li,.event{border-left-color:#d9cbf3}.history small,.help{color:#776c87}
+input,select,textarea{color:#3a2c52;border-color:#ded5ec}.bar-fill{background:linear-gradient(90deg,#563fc0,#9274e3)}.bar-track{background:#eee8f8}.risk-line{border-color:#eeeaf4}.toast{background:#2e2267}.demo-tag{background:#f0eafa;color:#563fc0}footer{color:#82778f}
+.mobile-menu{color:#563fc0}
+@media(max-width:760px){.sidebar.open~.workspace .mobile-menu{color:#fff}.brand img{width:155px;height:auto}.topbar{padding-top:12px}.page-head h1{font-size:27px}.primary{font-size:13px}.reference-row .badge{max-width:95px}}

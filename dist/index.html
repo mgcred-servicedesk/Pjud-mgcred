@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Portal demonstrativo do Jurídico MG Cred: demandas, processos e prioridades em uma visão executiva.">
+  <title>Jurídico MG Cred</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232e2267'/%3E%3Ctext x='16' y='23' text-anchor='middle' font-family='Arial' font-size='23' fill='white'%3EM%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="original-theme.css"><link rel="stylesheet" href="brand.css"><script src="home.js" defer></script><script src="app.js" defer></script>
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <a href="#dashboard" class="brand" aria-label="MG Cred — início do portal jurídico"><img src="assets/mgcred-logo-white.webp" width="168" height="60" alt="MG Cred"><small>JURÍDICO & COMPLIANCE</small></a>
+    <nav aria-label="Menu principal">
+      <p>VISÃO GERAL</p><a href="#dashboard" data-page="dashboard"><span aria-hidden="true">▦</span> Dashboard</a>
+      <p>JURÍDICO</p><a href="#demandas" data-page="demandas"><span aria-hidden="true">▤</span> Demandas <span id="nav-count" class="nav-count"></span></a>
+      <a href="#processos" data-page="processos"><span aria-hidden="true">⚖</span> Processos</a>
+      <a href="#tarefas" data-page="tarefas"><span aria-hidden="true">◷</span> Tarefas / Prazos</a>
+      <a href="#documentos" data-page="documentos"><span aria-hidden="true">▧</span> Documentos</a>
+      <a href="#relatorios" data-page="relatorios"><span aria-hidden="true">▥</span> Relatórios</a>
+      <p>GOVERNANÇA</p><a href="#governanca" data-page="governanca"><span aria-hidden="true">◇</span> Compliance & LGPD</a>
+      <p>SISTEMA</p><a href="#administracao" data-page="administracao"><span aria-hidden="true">⚙</span> Administração</a>
+    </nav>
+    <div class="sidebar-bottom"><span class="avatar">JM</span><div>Administrador Jurídico<small>Ambiente de demonstração</small></div></div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar"><button class="mobile-menu subtle" aria-label="Abrir menu" aria-expanded="false">☰</button><form id="global-search" role="search"><input type="search" name="query" aria-label="Buscar demanda, processo ou documento" placeholder="Buscar demanda, processo ou documento…" maxlength="160"><button class="subtle" aria-label="Pesquisar">⌕</button></form><span id="breadcrumb" class="sr-only">Visão geral</span><div class="user">João Marcelo<small>Administrador · Demonstração</small></div></header>
+    <main id="main" tabindex="-1"></main>
+    <footer>Dados fictícios · Alterações e anexos duram apenas nesta sessão. Não insira informações reais.</footer>
+  </div>
+  <dialog id="request-dialog" aria-labelledby="request-title">
+    <form id="request-form">
+      <div class="dialog-head"><div><span class="eyebrow">DEMANDAS</span><h2 id="request-title">Nova solicitação jurídica</h2></div><button type="button" class="close subtle" aria-label="Fechar formulário">×</button></div>
+      <p class="muted">Conte ao Jurídico do que você precisa. Use apenas informações fictícias.</p>
+      <label>Assunto<input name="subject" required maxlength="140" placeholder="Ex.: Análise de contrato com fornecedor"></label>
+      <div class="form-grid"><label>Categoria<select name="category" id="category"></select></label><label>Prioridade<select name="priority"><option>Normal</option><option>Alta</option><option>Urgente</option></select></label></div>
+      <label>Descrição<textarea name="description" required maxlength="5000" rows="4" placeholder="Contexto, objetivo e informações necessárias"></textarea></label>
+      <div class="form-grid"><label>Solicitante<input name="requester" required maxlength="80" placeholder="Nome completo"></label><label>Setor<input name="department" required maxlength="80" placeholder="Ex.: Financeiro"></label></div>
+      <label>Anexos de demonstração<input type="file" name="attachments" multiple></label><p class="help">Até 5 arquivos, 5 MB cada. Os arquivos ficam apenas na memória desta página.</p>
+      <p class="form-error" id="request-error" role="alert"></p>
+      <div class="dialog-actions"><button type="button" class="secondary close">Cancelar</button><button class="primary" type="submit">Criar solicitação</button></div>
+    </form>
+  </dialog>
+  <dialog id="detail-dialog" aria-labelledby="detail-title"><div id="detail-content"></div></dialog>
+  <div id="toast" class="toast" role="status"></div>
+</body></html>
+

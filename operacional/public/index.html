@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Jurídico MG Cred</title><link rel="icon" href="assets/mgcred-logo.webp"><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="original-theme.css"><link rel="stylesheet" href="brand.css"><link rel="stylesheet" href="portal.css"><script src="portal.js" defer></script></head>
+<body>
+<div id="auth"></div>
+<div id="portal" hidden>
+  <aside class="sidebar" id="sidebar"><a href="#dashboard" class="brand" aria-label="MG Cred — início"><img src="assets/mgcred-logo-white.webp" width="168" height="60" alt="MG Cred"><small>JURÍDICO & COMPLIANCE</small></a>
+    <nav aria-label="Menu principal"><p>VISÃO GERAL</p><a href="#dashboard">▦ Dashboard</a><p>JURÍDICO</p><a href="#demandas">▤ Demandas</a><a href="#processos">⚖ Processos</a><a href="#tarefas">◷ Tarefas / Prazos</a><a href="#documentos">▧ Documentos</a><a href="#relatorios">▥ Relatórios</a><p>GOVERNANÇA</p><a href="#governanca">◇ Compliance & LGPD</a><p>SISTEMA</p><a href="#administracao" id="admin-nav">⚙ Administração</a><a href="#conta">◉ Minha conta</a></nav>
+    <div class="sidebar-bottom"><span class="avatar" id="initials"></span><div><span id="side-name"></span><small id="side-role"></small></div></div>
+  </aside>
+  <div class="workspace"><header class="topbar"><button class="mobile-menu subtle" id="menu-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button><form id="global-search" role="search"><input type="search" name="query" aria-label="Buscar nos registros autorizados" placeholder="Buscar nos seus registros…" maxlength="160"><button class="subtle" aria-label="Pesquisar">⌕</button></form><button class="secondary" id="refresh">Atualizar</button><button class="subtle" id="logout">Sair</button></header><main id="main" tabindex="-1"></main><footer>Jurídico MG Cred · Ambiente autenticado · Informações conforme suas permissões.</footer></div>
+</div>
+<dialog id="modal" aria-labelledby="modal-title"><div class="dialog-head"><h2 id="modal-title"></h2><button class="close subtle" type="button" aria-label="Fechar">×</button></div><div id="modal-body"></div><p id="modal-error" class="form-error" role="alert"></p></dialog>
+<div id="toast" class="toast" role="status"></div>
+</body></html>

@@ -1,0 +1,16 @@
+PORTAL JURIDICO MG CRED — CONTINUAR EM OUTRO COMPUTADOR
+
+Extraia MGCred-Projeto-Completo-2026-09-25.zip em C:\Projetos\MGCred-Juridico e abra a pasta no Codex.
+
+Conteudo:
+operacional/: aplicacao Node.js 24 e SQLite, login e permissoes, solicitacoes, processos, tarefas, documentos, importacao CSV, backups, Docker e Caddy. Leia LEIA-PRIMEIRO.md e docs/IMPLANTACAO-TI.md.
+dist/: demonstracao estatica, separada da aplicacao operacional.
+original/: arquivos originais fornecidos pelo usuario.
+ARQUITETURA.md e IDENTIDADE-VISUAL.md: contexto e decisoes do projeto.
+
+Estado da entrega: em 28/09/2026, 18 testes passaram (Node 24.13.0), o Docker Compose foi validado com imagens-base locais equivalentes e o Caddy foi testado com certificado interno. Corrigido erro em anexos entre 3,5 e 5 MB. Ver operacional/docs/VALIDACAO-REALIZADA.md. DNS, certificado real e build com imagens oficiais ainda precisam ser feitos no servidor de destino. A aplicacao operacional nao foi publicada. O pacote nao inclui banco com dados reais, senhas de producao ou configuracoes privadas.
+
+Demonstracao publicada: https://juridico-mgcred-demo.laureanoadvogados.chatgpt.site
+
+Prompt para continuar:
+Quero continuar o Portal Juridico MG Cred nesta pasta. Leia operacional/LEIA-PRIMEIRO.md, operacional/docs/IMPLANTACAO-TI.md, operacional/docs/VALIDACAO-REALIZADA.md e operacional/docs/SEGURANCA-E-LIMITES.md e confira o codigo. Preserve a identidade visual MG Cred e as funcionalidades. Prepare a execucao local neste computador. O ambiente operacional ainda nao foi publicado; a demonstracao publica e separada. Nao presuma que Docker, DNS ou HTTPS ja foram validados.
