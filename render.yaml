@@ -1,5 +1,5 @@
-# Blueprint do Render — Portal Jurídico MG Cred
-# Antes do primeiro deploy: definir o domínio em APP_ORIGIN e em domains (ver DEPLOY-RENDER.md).
+# Blueprint gratuito do Render — MVP do Portal Jurídico MG Cred.
+# Destinado somente a apresentações: o banco gratuito expira em 30 dias e não possui backup.
 
 services:
   - type: web
@@ -8,10 +8,15 @@ services:
     dockerfilePath: ./Dockerfile
     dockerContext: .
     region: virginia
-    plan: 0.5c-512mb
+    plan: free
     numInstances: 1
     healthCheckPath: /healthz
-    preDeployCommand: node src/db/migrate.ts
+    # O plano gratuito não oferece pre-deploy command. As migrações precisam
+    # terminar antes de o servidor começar a aceitar requisições.
+    dockerCommand: /bin/sh -c 'node src/db/migrate.ts && exec node src/server.ts'
+    # O plano gratuito também não oferece Shell. Este hook cria o primeiro
+    # administrador e registra o link de ativação no log do primeiro deploy.
+    initialDeployHook: node src/scripts/create-admin.ts --email "$BOOTSTRAP_ADMIN_EMAIL"
     autoDeployTrigger: commit
     # domains:
     #   - juridico.DOMINIO.com.br
@@ -24,7 +29,10 @@ services:
       - key: CLIENT_IP_HEADER
         value: x-forwarded-for
       - key: MAX_STORAGE_BYTES
-        value: "2147483648"
+        # Reserva metade do banco de 1 GB para tabelas, índices e auditoria.
+        value: "536870912"
+      - key: BOOTSTRAP_ADMIN_EMAIL
+        sync: false
       - key: DATABASE_URL
         fromDatabase:
           name: mgcred-juridico-db
@@ -33,9 +41,8 @@ services:
 databases:
   - name: mgcred-juridico-db
     region: virginia
-    plan: 0.1c-256mb
+    plan: free
     postgresMajorVersion: "18"
     databaseName: mgcred
     user: mgcred
-    diskSizeGB: 5
     ipAllowList: [] # somente a rede privada do Render
