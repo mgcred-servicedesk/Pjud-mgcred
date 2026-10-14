@@ -1,0 +1,17 @@
+{
+  "name": "mgcred-juridico",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.33.0",
+  "engines": { "node": ">=24.13.0 <25" },
+  "scripts": {
+    "dev:api": "pnpm --filter @mgcred/api dev",
+    "dev:web": "pnpm --filter @mgcred/web dev",
+    "build": "pnpm --filter @mgcred/web build",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm --filter @mgcred/api test",
+    "db:generate": "pnpm --filter @mgcred/api db:generate",
+    "db:migrate": "pnpm --filter @mgcred/api db:migrate",
+    "start": "pnpm --filter @mgcred/api start"
+  }
+}

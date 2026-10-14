@@ -1,0 +1,41 @@
+# Blueprint do Render — Portal Jurídico MG Cred
+# Antes do primeiro deploy: definir o domínio em APP_ORIGIN e em domains (ver DEPLOY-RENDER.md).
+
+services:
+  - type: web
+    name: mgcred-juridico
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    region: virginia
+    plan: 0.5c-512mb
+    numInstances: 1
+    healthCheckPath: /healthz
+    preDeployCommand: node src/db/migrate.ts
+    autoDeployTrigger: commit
+    # domains:
+    #   - juridico.DOMINIO.com.br
+    # renderSubdomainPolicy: disabled   # ativar depois que o domínio próprio estiver no ar
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: APP_ORIGIN
+        value: https://mgcred-juridico.onrender.com # trocar pelo domínio definitivo
+      - key: CLIENT_IP_HEADER
+        value: x-forwarded-for
+      - key: MAX_STORAGE_BYTES
+        value: "2147483648"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: mgcred-juridico-db
+          property: connectionString
+
+databases:
+  - name: mgcred-juridico-db
+    region: virginia
+    plan: 0.1c-256mb
+    postgresMajorVersion: "18"
+    databaseName: mgcred
+    user: mgcred
+    diskSizeGB: 5
+    ipAllowList: [] # somente a rede privada do Render

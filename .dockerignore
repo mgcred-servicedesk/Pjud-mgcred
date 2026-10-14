@@ -1,0 +1,12 @@
+.git
+**/node_modules
+**/dist
+**/.env
+**/*.log
+operacional
+original
+db
+apps/api/test
+*.md
+*.txt
+preview.mjs

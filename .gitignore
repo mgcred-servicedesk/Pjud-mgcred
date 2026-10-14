@@ -2,3 +2,5 @@
 *.tar.gz
 node_modules/
 *:Zone.Identifier
+apps/web/dist/
+.env

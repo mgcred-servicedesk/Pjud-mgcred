@@ -1,0 +1,9 @@
+packages:
+  - apps/*
+  - packages/*
+
+# Só instala versões publicadas há pelo menos 7 dias (em minutos).
+minimumReleaseAge: 10080
+
+onlyBuiltDependencies:
+  - esbuild

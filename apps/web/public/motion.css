@@ -1,0 +1,179 @@
+/* Movimento e microinterações do portal.
+   Durações curtas (120–380 ms), saída mais rápida que entrada, sempre desligadas com prefers-reduced-motion. */
+:root{--ease-out:cubic-bezier(.22,1,.36,1);--ease-in:cubic-bezier(.55,0,.75,.2);--ease-spring:cubic-bezier(.34,1.3,.64,1);--dur-fast:140ms;--dur:220ms;--dur-slow:340ms}
+
+@keyframes rise-in{from{opacity:0;transform:translateY(10px)}}
+@keyframes row-in{from{opacity:0;transform:translateY(4px)}}
+@keyframes fade-in{from{opacity:0}}
+@keyframes swap-in{from{opacity:0;transform:translateY(6px)}}
+@keyframes shake{20%{transform:translateX(-6px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(2px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shimmer{from{background-position:100% 0}to{background-position:0 0}}
+@keyframes row-flash{0%,35%{background-color:#fff0e0}100%{background-color:transparent}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes pop{50%{transform:scale(1.25)}}
+@keyframes dialog-in{from{opacity:0;transform:translateY(14px) scale(.97)}}
+@keyframes dialog-out{to{opacity:0;transform:translateY(8px) scale(.98)}}
+@keyframes backdrop-in{from{opacity:0}}
+@keyframes backdrop-out{to{opacity:0}}
+@keyframes vt-out{to{opacity:0;transform:translateY(-6px)}}
+@keyframes vt-in{from{opacity:0;transform:translateY(12px)}}
+@keyframes pulse{50%{opacity:.55;transform:scale(.97)}}
+
+/* ===== Transições de tela (View Transitions API) ===== */
+html[data-vt=page] main{view-transition-name:main}
+html[data-vt=page] .sidebar{view-transition-name:sidebar}
+html[data-vt=page] .topbar{view-transition-name:topbar}
+::view-transition-old(sidebar),::view-transition-old(topbar){display:none}
+::view-transition-new(sidebar),::view-transition-new(topbar){animation:none}
+::view-transition-old(main){animation:vt-out 150ms var(--ease-in) both}
+::view-transition-new(main){animation:vt-in var(--dur-slow) var(--ease-out) 40ms both}
+html[data-vt=filter] .results{view-transition-name:results}
+::view-transition-old(results){animation:fade-in 120ms var(--ease-in) reverse both}
+::view-transition-new(results){animation:swap-in var(--dur) var(--ease-out) both}
+::view-transition-group(results){animation-duration:var(--dur);animation-timing-function:var(--ease-out)}
+::view-transition-old(root){animation-duration:200ms}
+::view-transition-new(root){animation-duration:320ms}
+/* Navegadores sem View Transitions: entrada simples da tela */
+.no-vt .page{animation:rise-in var(--dur-slow) var(--ease-out) both}
+
+/* ===== Entrada escalonada do conteúdo ===== */
+.page .metrics .metric{animation:rise-in 380ms var(--ease-out) both}
+.page .metrics .metric:nth-child(2){animation-delay:50ms}
+.page .metrics .metric:nth-child(3){animation-delay:100ms}
+.page .metrics .metric:nth-child(4){animation-delay:150ms}
+.page .reference-grid>.panel{animation:rise-in 420ms var(--ease-out) both}
+.page .reference-grid>.panel:nth-child(1){animation-delay:120ms}
+.page .reference-grid>.panel:nth-child(2){animation-delay:170ms}
+.page .reference-grid>.panel:nth-child(3){animation-delay:220ms}
+.page .reference-grid>.panel:nth-child(4){animation-delay:270ms}
+.row-in{animation:row-in 260ms var(--ease-out) both;animation-delay:calc(var(--i,0) * 22ms)}
+.row-in.row-flash,.row-flash{animation:row-in 260ms var(--ease-out) both,row-flash 2.2s ease-out}
+.item-in{animation:rise-in 300ms var(--ease-out) both}
+.fade-in{animation:fade-in 300ms ease-out both}
+.swap-in{animation:swap-in 260ms var(--ease-out) both}
+.shake{animation:shake 380ms ease-in-out}
+
+/* ===== Botões e elementos clicáveis ===== */
+.primary,.secondary,.chip,.metric,.quick-actions>button,.quick-actions>a,.search-clear{transition:transform var(--dur-fast) var(--ease-out),box-shadow var(--dur) ease,background var(--dur-fast) ease,border-color var(--dur-fast) ease,color var(--dur-fast) ease,opacity var(--dur-fast) ease}
+.primary:active:not(:disabled),.secondary:active:not(:disabled),.chip:active,.quick-actions>button:active,.quick-actions>a:active{transform:scale(.97)}
+.primary:hover:not(:disabled){box-shadow:0 6px 18px #ff7e0033}
+.metric:hover,.quick-actions>button:hover,.quick-actions>a:hover{transform:translateY(-2px);box-shadow:0 10px 24px #2e226714}
+.metric:active{transform:translateY(0) scale(.985)}
+.row-link{transition:color var(--dur-fast) ease}
+tbody tr{transition:background-color var(--dur-fast) ease}
+tbody tr:hover{background-color:#faf8fe}
+
+/* Estado de envio: indicador no botão de enviar */
+form[aria-busy=true] button:disabled{opacity:.85;cursor:progress}
+form[aria-busy=true] button:is(.primary,.secondary):not([type=button])::before{content:'';display:inline-block;width:13px;height:13px;margin-right:8px;vertical-align:-2px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:spin .7s linear infinite}
+
+/* ===== Campos ===== */
+input,select,textarea{transition:border-color var(--dur-fast) ease,box-shadow var(--dur) ease}
+input:focus,select:focus,textarea:focus{border-color:#9679ec;box-shadow:0 0 0 3px #563fc01f}
+#global-search{transition:border-color var(--dur) ease,box-shadow var(--dur) ease}
+#global-search:focus-within{border-color:#b8a8dd;box-shadow:0 0 0 4px #563fc01a}
+#global-search input:focus,#global-search input:focus-visible{outline:none;box-shadow:none}
+.search-hint{align-self:center;font:600 11px/1 Poppins,sans-serif;color:#8a7fa0;border:1px solid #ddd5ec;border-radius:5px;padding:3px 6px;transition:opacity var(--dur-fast) ease}
+#global-search:focus-within .search-hint{opacity:0}
+mark{background:#ffe3c4;color:inherit;border-radius:3px;padding:0 1px}
+
+/* Busca e filtros da lista de demandas */
+.toolbar-stack{flex-direction:column;align-items:stretch;gap:14px}
+.search-field{position:relative;display:flex;align-items:center}
+.search-field input{padding-left:38px;padding-right:38px}
+.search-field-icon{position:absolute;left:13px;color:#8a7fa0;font-size:18px;pointer-events:none}
+.search-clear{position:absolute;right:6px;width:30px;height:30px;border:0;border-radius:50%;background:#f0ebfa;color:#563fc0;font-size:18px;line-height:1;opacity:0;transform:scale(.6);pointer-events:none}
+.search-clear.show{opacity:1;transform:none;pointer-events:auto}
+.search-clear:hover{background:#e4dbf7}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:8px;border:1px solid #e1d9ef;background:#fff;color:#4b368c;border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600}
+.chip:hover{border-color:#c9bae7;background:#faf8fe}
+.chip.active{background:#563fc0;border-color:#563fc0;color:#fff;box-shadow:0 4px 12px #563fc033}
+.chip.empty:not(.active){color:#a49bb5}
+.chip-count{display:inline-grid;place-items:center;min-width:22px;height:20px;padding:0 6px;border-radius:999px;background:#f0ebfa;color:#563fc0;font-size:11px;font-weight:700;transition:background var(--dur-fast),color var(--dur-fast)}
+.chip.active .chip-count{background:#ffffff2e;color:#fff}
+h2 .chip-count{vertical-align:2px;margin-left:6px}
+.results-count{margin:0;padding:12px 24px 0;font-size:12px;color:#8a7fa0}
+
+/* ===== Diálogo ===== */
+dialog[open]{animation:dialog-in 260ms var(--ease-out)}
+dialog[open]::backdrop{animation:backdrop-in 260ms ease-out}
+dialog.is-closing{animation:dialog-out 200ms var(--ease-in) forwards}
+dialog.is-closing::backdrop{animation:backdrop-out 200ms ease-in forwards}
+.dialog-head .close{transition:transform var(--dur-fast) var(--ease-out),color var(--dur-fast)}
+.dialog-head .close:hover{transform:rotate(90deg);color:#2e2267}
+
+/* ===== Toast (popover na camada superior) ===== */
+.toast[popover]{inset:auto 25px 25px auto;margin:0;border:0;overflow:visible;color:#fff}
+.toast{display:flex;align-items:center;gap:12px;opacity:0;visibility:hidden;transform:translateY(16px) scale(.98);transition:opacity var(--dur) ease,transform var(--dur-slow) var(--ease-out),visibility 0s linear var(--dur-slow)}
+.toast.show{display:flex;opacity:1;visibility:visible;transform:none;animation:none;transition:opacity var(--dur) ease,transform var(--dur-slow) var(--ease-spring),visibility 0s}
+.toast::before{content:'✓';display:grid;place-items:center;flex-shrink:0;width:24px;height:24px;border-radius:50%;background:#3ccf91;color:#10331f;font-size:13px;font-weight:800}
+.toast-error{background:#7a1f35}
+.toast-error::before{content:'!';background:#ff8a7a;color:#4a0f1c}
+
+/* ===== Carregamento ===== */
+.skeleton-group{padding:4px 0}
+.skeleton{display:block;height:14px;margin:10px 0;border-radius:7px;background:linear-gradient(90deg,#f1edf7 25%,#e4ddf1 37%,#f1edf7 63%);background-size:400% 100%;animation:shimmer 1.4s ease infinite}
+.skeleton:nth-child(2n){width:72%}
+.skeleton:nth-child(3n){width:54%}
+.skeleton-block{height:84px;width:100%!important;margin:16px 0}
+.boot-splash{min-height:100vh;display:grid;place-items:center}
+.boot-splash img{width:150px;animation:pulse 1.4s ease-in-out infinite}
+.refresh-icon{display:inline-block}
+.refresh-button.is-spinning .refresh-icon{animation:spin .8s linear infinite}
+.login-card{animation:rise-in 420ms var(--ease-out) both}
+
+/* ===== Tarefas ===== */
+.check-row{transition:background-color var(--dur) ease,opacity var(--dur) ease}
+.check-row.done label{text-decoration:none}
+.check-row .task-title{background:linear-gradient(currentColor,currentColor) 0 58%/0 1.5px no-repeat;transition:background-size 320ms var(--ease-out),color var(--dur) ease}
+.check-row.done .task-title{background-size:100% 1.5px}
+.check-row input:checked{animation:pop 260ms var(--ease-out)}
+.check-row[aria-busy=true]{opacity:.75}
+
+/* ===== Relatórios e status ===== */
+.bar-fill{transition:width 500ms var(--ease-out)}
+.bar-grow{transform-origin:left;animation:grow 700ms var(--ease-out) both;animation-delay:calc(var(--i,0) * 60ms)}
+.status-dot{display:inline-flex;align-items:center;gap:7px}
+.status-dot::before{content:'';width:8px;height:8px;border-radius:50%;background:#c2bacf;transition:background var(--dur) ease,box-shadow var(--dur) ease}
+.status-dot.on::before{background:#2fb47c;box-shadow:0 0 0 3px #2fb47c26}
+
+/* ===== Menu lateral ===== */
+.sidebar nav{position:relative}
+.sidebar nav a{position:relative;z-index:1;transition:background var(--dur-fast) ease,color var(--dur-fast) ease}
+.sidebar nav a.active,.sidebar nav a.active:hover{background:transparent;box-shadow:none}
+.nav-indicator{position:absolute;left:0;right:0;top:0;border-radius:10px;background:#ffffff1f;box-shadow:inset 3px 0 #ff9640;pointer-events:none}
+.nav-indicator.ready{transition:transform 360ms var(--ease-spring),height 360ms var(--ease-out)}
+.sidebar-backdrop{display:none}
+@media(max-width:760px){
+  .sidebar{display:flex;visibility:hidden;transform:translateX(-105%);box-shadow:12px 0 40px #1b0e4940;transition:transform 300ms var(--ease-in),visibility 0s linear 300ms}
+  .sidebar.open{visibility:visible;transform:none;transition:transform 340ms var(--ease-out),visibility 0s}
+  .sidebar-backdrop{display:block;position:fixed;inset:0;z-index:9;background:#1b0e4959;opacity:0;pointer-events:none;transition:opacity 260ms ease}
+  .sidebar-backdrop.show{opacity:1;pointer-events:auto}
+  .search-hint{display:none}
+}
+
+/* Ícone do menu mobile: três linhas que viram "×" */
+.menu-icon,.menu-icon::before,.menu-icon::after{display:block;width:20px;height:2px;border-radius:2px;background:currentColor;transition:transform 260ms var(--ease-out),background-color 160ms ease}
+.menu-icon{position:relative}
+.menu-icon::before,.menu-icon::after{content:'';position:absolute;left:0}
+.menu-icon::before{transform:translateY(-6px)}
+.menu-icon::after{transform:translateY(6px)}
+.mobile-menu.is-open .menu-icon{background-color:transparent}
+.mobile-menu.is-open .menu-icon::before{transform:rotate(45deg)}
+.mobile-menu.is-open .menu-icon::after{transform:rotate(-45deg)}
+.mobile-menu{padding:10px 8px}
+
+/* Ajustes de layout que afetam as transições */
+.demand-table{table-layout:fixed;min-width:640px}
+.demand-table .col-subject{width:50%}.demand-table .col-category{width:17%}.demand-table .col-status{width:19%}.demand-table .col-priority{width:14%}
+.section-grid>.panel+.panel{margin-top:0}
+main:focus{outline:none}
+
+/* ===== Movimento reduzido ===== */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.01ms!important;transition-delay:0s!important}
+  ::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}
+  .skeleton{animation:none}
+}
