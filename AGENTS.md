@@ -10,7 +10,7 @@
 ## Comandos (raiz, pnpm 10)
 - `pnpm install` — `minimumReleaseAge` de 7 dias em `pnpm-workspace.yaml` (não reduzir).
 - `pnpm typecheck` — TypeScript (tsc 7) em todos os pacotes.
-- `pnpm test` — 22 testes de integração da API (Vitest). Exigem PostgreSQL em `TEST_DATABASE_URL` (padrão `postgres://postgres:dev@127.0.0.1:5433/postgres`); cada execução cria e remove um banco temporário.
+- `pnpm test` — 24 testes de integração da API (Vitest). Exigem PostgreSQL em `TEST_DATABASE_URL` (padrão `postgres://postgres:dev@127.0.0.1:5433/postgres`); cada execução cria e remove um banco temporário.
 - `pnpm build` — build da interface (`apps/web/dist`).
 - `pnpm db:generate` — gera migração a partir de `apps/api/src/db/schema.ts`; `pnpm db:migrate` aplica (usa `apps/api/.env`).
 
@@ -19,7 +19,7 @@
 docker run -d --name mgcred-pg -e POSTGRES_PASSWORD=dev -e POSTGRES_DB=mgcred -p 127.0.0.1:5433:5432 postgres:18-alpine
 cp apps/api/.env.example apps/api/.env
 pnpm db:migrate
-pnpm --filter @mgcred/api create-admin --email admin@exemplo.test
+pnpm --filter @mgcred/api create-admin --email admin@exemplo.test   # ou BOOTSTRAP_ADMIN_EMAIL/PASSWORD no .env (services/bootstrap.ts)
 pnpm dev:api   # :4320
 pnpm dev:web   # :5173 (APP_ORIGIN=http://127.0.0.1:5173 no .env da API)
 ```

@@ -62,7 +62,7 @@ pnpm dev:api
 pnpm dev:web
 ```
 
-Abra o link de ativação, defina a senha e entre em http://127.0.0.1:5173. O Vite repassa `/api` para a API. Por isso o `APP_ORIGIN` do `.env` precisa ser `http://127.0.0.1:5173`, que também é a origem usada nos links de ativação.
+Abra o link de ativação, defina a senha e entre em http://127.0.0.1:5173. Outra opção, sem link: defina `BOOTSTRAP_ADMIN_EMAIL` e `BOOTSTRAP_ADMIN_PASSWORD` no `.env` (senha de 14 a 128 caracteres). A API cria o administrador ao iniciar, desde que ainda não exista nenhum. O Vite repassa `/api` para a API. Por isso o `APP_ORIGIN` do `.env` precisa ser `http://127.0.0.1:5173`, que também é a origem usada nos links de ativação.
 
 Para servir tudo pela API, como em produção, rode `pnpm build`, defina `WEB_DIST=../web/dist` e `APP_ORIGIN=http://127.0.0.1:4320` no `.env` e use só `pnpm dev:api`.
 

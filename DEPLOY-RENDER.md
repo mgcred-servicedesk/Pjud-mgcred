@@ -20,20 +20,35 @@ O `render.yaml` na raiz cria dois recursos gratuitos na região **Virginia (EUA)
 ## 2. Primeiro deploy
 
 1. No Render: **New → Blueprint**, selecione o repositório e a branch. O Render lê o `render.yaml`.
-2. Quando solicitado, informe `BOOTSTRAP_ADMIN_EMAIL`. O valor não fica gravado no repositório.
-3. Confirme a criação. A ordem é: banco → build da imagem → migrações → início do serviço → verificação em `/healthz` → criação do administrador.
+2. Quando solicitado, informe `BOOTSTRAP_ADMIN_EMAIL` e `BOOTSTRAP_ADMIN_PASSWORD` (de 14 a 128 caracteres; uma frase-senha serve). Os valores não ficam gravados no repositório.
+3. Confirme a criação. A ordem é: banco → build da imagem → migrações → criação do administrador → início do serviço → verificação em `/healthz`.
 4. Se o nome `mgcred-juridico` estiver ocupado, o Render gera outro endereço (`mgcred-juridico-xxxx.onrender.com`). Nesse caso, ajuste `APP_ORIGIN` no painel antes de usar o portal — gravações vindas de outra origem são recusadas.
 
-## 3. Ativar o primeiro administrador
+## 3. Primeiro administrador
 
-O plano gratuito não oferece Shell. Depois do primeiro deploy, abra os logs do evento **Initial Deploy Hook** do serviço. O comando configurado no Blueprint mostra um endereço como:
+Ao iniciar, a API verifica se já existe algum administrador. Se não existir e `BOOTSTRAP_ADMIN_PASSWORD` estiver definida, ela cria o administrador com o e-mail de `BOOTSTRAP_ADMIN_EMAIL`, já ativo e com essa senha, e registra o evento na auditoria. O log do serviço mostra:
 
 ```text
-Abra este link pessoal para definir a senha (validade de 24 horas):
-https://mgcred-juridico.onrender.com/ativar/...
+Administrador inicial criado: admin@empresa.com.br. Remova BOOTSTRAP_ADMIN_PASSWORD do ambiente após o primeiro acesso.
 ```
 
-Abra o link e defina a senha. Ele é pessoal, vale por 24 horas e deixa de funcionar depois da ativação.
+Se já houver administrador, as variáveis são ignoradas. Elas não alteram a senha de ninguém.
+
+### Serviço já criado (sem a variável de senha)
+
+1. No [Dashboard do Render](https://dashboard.render.com), abra o serviço **mgcred-juridico** → **Environment**.
+2. Em **Environment Variables**, clique em **+ Add Environment Variable**:
+   - Key: `BOOTSTRAP_ADMIN_PASSWORD`, Value: a senha (14 a 128 caracteres).
+   - Confira se `BOOTSTRAP_ADMIN_EMAIL` existe e tem o e-mail desejado. Se não existir, adicione também.
+3. Clique em **Save, rebuild, and deploy** (ou **Save and deploy**). O serviço reinicia e cria o administrador.
+4. Em **Logs**, procure a linha `Administrador inicial criado`. Se aparecer um `Erro`, a senha está curta ou o e-mail é inválido ou já pertence a um usuário comum.
+
+Se o administrador já tiver sido criado antes pelo link do primeiro deploy e o link expirou, esta variável não resolve. Nesse caso, apague o banco e crie o Blueprint de novo, ou peça a outro administrador um novo link pela tela **Administração**.
+
+### Depois do primeiro acesso
+
+1. Entre no portal e troque a senha em **Minha conta → Alterar senha**, para que a senha definitiva não fique no painel do Render.
+2. Em **Environment**, apague `BOOTSTRAP_ADMIN_PASSWORD` (ícone de lixeira) e salve. O serviço é reiniciado sem criar nada.
 
 Os demais usuários são criados pela tela **Administração**, que também gera os links de ativação.
 
@@ -51,7 +66,8 @@ Os demais usuários são criados pela tela **Administração**, que também gera
 | `APP_ORIGIN` | origem exata do portal | Verificação de origem nas gravações e links de ativação |
 | `CLIENT_IP_HEADER` | `x-forwarded-for` | IP real do usuário encaminhado pelo proxy do Render (limite de tentativas de login por IP) |
 | `MAX_STORAGE_BYTES` | `536870912` | Cota total de anexos (512 MB), deixando espaço para tabelas, índices e auditoria |
-| `BOOTSTRAP_ADMIN_EMAIL` | informado no primeiro deploy | E-mail usado pelo hook para criar o administrador inicial |
+| `BOOTSTRAP_ADMIN_EMAIL` | informado no primeiro deploy | E-mail do administrador inicial |
+| `BOOTSTRAP_ADMIN_PASSWORD` | informado no primeiro deploy; apagar após o primeiro acesso | Senha do administrador inicial (só é usada enquanto não houver nenhum administrador) |
 | `DATABASE_URL` | do banco (automático) | Conexão pela rede privada |
 | `HOST`, `PORT`, `WEB_DIST` | definidos no `Dockerfile` | — |
 

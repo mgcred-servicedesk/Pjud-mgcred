@@ -13,10 +13,9 @@ services:
     healthCheckPath: /healthz
     # As migrações rodam antes do servidor pelo CMD do Dockerfile. Não usar
     # dockerCommand com aspas: o Render as repassa literalmente ao /bin/sh.
-    # O plano gratuito não oferece pre-deploy command nem Shell. Este hook cria o primeiro
-    # administrador e registra o link de ativação no log do primeiro deploy.
-    # O e-mail vem de BOOTSTRAP_ADMIN_EMAIL (sem aspas/variáveis no comando).
-    initialDeployHook: node src/scripts/create-admin.ts
+    # O plano gratuito não oferece pre-deploy command nem Shell. O primeiro administrador é
+    # criado pela API na inicialização a partir de BOOTSTRAP_ADMIN_EMAIL + BOOTSTRAP_ADMIN_PASSWORD
+    # (somente enquanto não existir nenhum administrador).
     autoDeployTrigger: commit
     # domains:
     #   - juridico.DOMINIO.com.br
@@ -32,6 +31,8 @@ services:
         # Reserva metade do banco de 1 GB para tabelas, índices e auditoria.
         value: "536870912"
       - key: BOOTSTRAP_ADMIN_EMAIL
+        sync: false
+      - key: BOOTSTRAP_ADMIN_PASSWORD
         sync: false
       - key: DATABASE_URL
         fromDatabase:
