@@ -29,4 +29,6 @@ ENV WEB_DIST=/app/apps/web/dist HOST=0.0.0.0 PORT=4320
 USER node
 WORKDIR /app/apps/api
 EXPOSE 4320
-CMD ["node", "src/server.ts"]
+# As migrações precisam terminar antes de o servidor começar a aceitar requisições
+# (o plano gratuito do Render não oferece pre-deploy command).
+CMD ["/bin/sh", "-c", "node src/db/migrate.ts && exec node src/server.ts"]

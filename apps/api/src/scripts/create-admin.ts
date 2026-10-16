@@ -1,5 +1,6 @@
 // Cria o primeiro administrador ou emite link de recuperação para um administrador existente.
 // Uso: node src/scripts/create-admin.ts --email adm@empresa.com.br [--name "Nome"] [--recover]
+// Sem --email, usa BOOTSTRAP_ADMIN_EMAIL (hook do Render, que não expande variáveis nos argumentos).
 import { and, eq, sql } from 'drizzle-orm';
 import { loadConfig } from '../config.ts';
 import { createDb } from '../db/client.ts';
@@ -10,7 +11,8 @@ import { issueInvitation } from '../routes/admin.ts';
 
 const args = process.argv.slice(2);
 const arg = (k: string) => (args.includes(k) ? args[args.indexOf(k) + 1] : undefined);
-if (!args.includes('--email')) {
+const adminEmail = arg('--email') ?? process.env.BOOTSTRAP_ADMIN_EMAIL;
+if (!adminEmail) {
   console.error('Uso: node src/scripts/create-admin.ts --email administrador@empresa.com.br [--name "Administrador Jurídico"] [--recover]');
   process.exit(1);
 }
@@ -18,7 +20,7 @@ if (!args.includes('--email')) {
 const config = loadConfig();
 const { db, pool } = createDb(config.databaseUrl);
 try {
-  const mail = email(arg('--email'));
+  const mail = email(adminEmail);
   const name = text(arg('--name') ?? 'Administrador Jurídico', 'Nome', 100);
   const recover = args.includes('--recover');
   const url = await db.transaction(async tx => {

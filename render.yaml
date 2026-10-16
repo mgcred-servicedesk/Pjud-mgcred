@@ -11,12 +11,12 @@ services:
     plan: free
     numInstances: 1
     healthCheckPath: /healthz
-    # O plano gratuito não oferece pre-deploy command. As migrações precisam
-    # terminar antes de o servidor começar a aceitar requisições.
-    dockerCommand: /bin/sh -c 'node src/db/migrate.ts && exec node src/server.ts'
-    # O plano gratuito também não oferece Shell. Este hook cria o primeiro
+    # As migrações rodam antes do servidor pelo CMD do Dockerfile. Não usar
+    # dockerCommand com aspas: o Render as repassa literalmente ao /bin/sh.
+    # O plano gratuito não oferece pre-deploy command nem Shell. Este hook cria o primeiro
     # administrador e registra o link de ativação no log do primeiro deploy.
-    initialDeployHook: node src/scripts/create-admin.ts --email "$BOOTSTRAP_ADMIN_EMAIL"
+    # O e-mail vem de BOOTSTRAP_ADMIN_EMAIL (sem aspas/variáveis no comando).
+    initialDeployHook: node src/scripts/create-admin.ts
     autoDeployTrigger: commit
     # domains:
     #   - juridico.DOMINIO.com.br
